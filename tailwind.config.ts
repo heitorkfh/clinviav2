@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,8 +26,13 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: '#4F46E5',
+					foreground: '#FFFFFF',
+					50: '#F0F0FF',
+					100: '#E5E5FF',
+					500: '#4F46E5',
+					600: '#4338CA',
+					700: '#3730A3'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -61,6 +67,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				clinvia: {
+					blue: '#4F46E5',
+					'blue-light': '#818CF8',
+					'blue-dark': '#3730A3',
+					gradient: {
+						from: '#667EEA',
+						to: '#764BA2'
+					}
 				}
 			},
 			borderRadius: {
@@ -84,11 +99,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out'
+			},
+			backgroundImage: {
+				'gradient-clinvia': 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
+				'gradient-blue': 'linear-gradient(135deg, #4F46E5 0%, #3730A3 100%)'
 			}
 		}
 	},
