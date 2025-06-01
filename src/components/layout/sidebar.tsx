@@ -71,19 +71,20 @@ const navigationItems = [
 ];
 
 export function AppSidebar() {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
   const location = useLocation();
+  const isCollapsed = state === 'collapsed';
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <Sidebar className={collapsed ? 'w-16' : 'w-64'} collapsible>
+    <Sidebar className={isCollapsed ? 'w-16' : 'w-64'} collapsible="icon">
       <SidebarContent className="bg-white border-r border-gray-200">
         <div className="p-4">
-          <Logo size={collapsed ? 'sm' : 'md'} showText={!collapsed} />
+          <Logo size={isCollapsed ? 'sm' : 'md'} showText={!isCollapsed} />
         </div>
 
-        {!collapsed && (
+        {!isCollapsed && (
           <div className="px-4 pb-4">
             <Button 
               className="w-full bg-gradient-clinvia hover:opacity-90 text-white"
@@ -113,7 +114,7 @@ export function AppSidebar() {
                       }
                     >
                       <item.icon className="h-5 w-5" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!isCollapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
