@@ -11,6 +11,7 @@ import Agenda from "./pages/agenda";
 import NovoAgendamento from "./pages/novo-agendamento";
 import PublicBooking from "./pages/public-booking";
 import Patients from "./pages/patients";
+import Professionals from "./pages/professionals";
 import MarketingLeads from "./pages/marketing/leads";
 import MarketingDisparos from "./pages/marketing/disparos";
 import MarketingFerramentas from "./pages/marketing/ferramentas";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/agenda" element={<Agenda />} />
           <Route path="/agenda/novo" element={<NovoAgendamento />} />
           <Route path="/patients" element={<Patients />} />
+          <Route path="/professionals" element={<Professionals />} />
           <Route path="/marketing/leads" element={<MarketingLeads />} />
           <Route path="/marketing/disparos" element={<MarketingDisparos />} />
           <Route path="/marketing/ferramentas" element={<MarketingFerramentas />} />

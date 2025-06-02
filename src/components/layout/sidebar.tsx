@@ -19,7 +19,6 @@ import {
   BarChart3,
   Settings,
   User,
-  FileText,
   MessageSquare,
   Stethoscope,
   UserPlus,
@@ -38,7 +37,6 @@ const menuItems = [
   { title: 'Agenda', url: '/agenda', icon: Calendar },
   { title: 'Pacientes', url: '/patients', icon: Users },
   { title: 'Profissionais', url: '/professionals', icon: Stethoscope },
-  { title: 'Procedimentos', url: '/procedures', icon: FileText },
   { title: 'Configurações', url: '/settings', icon: Settings },
 ];
 
@@ -150,7 +148,7 @@ export function AppSidebar() {
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
                     <NavLink 
-                      to="/novo-agendamento" 
+                      to="/agenda/novo" 
                       className="flex items-center gap-3 px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-50 font-medium"
                     >
                       <Calendar className="h-5 w-5" />
