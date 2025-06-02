@@ -7,15 +7,17 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarIcon, Clock, User, Stethoscope } from 'lucide-react';
+import { CalendarIcon, Clock, User, Stethoscope, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface NovoAgendamentoProps {
   onClose: () => void;
 }
 
 export function NovoAgendamento({ onClose }: NovoAgendamentoProps) {
+  const navigate = useNavigate();
   const [date, setDate] = React.useState<Date>();
 
   const timeSlots = [
@@ -25,10 +27,21 @@ export function NovoAgendamento({ onClose }: NovoAgendamentoProps) {
     '17:00', '17:30'
   ];
 
+  const handleAdvancedForm = () => {
+    onClose();
+    navigate('/agenda/novo');
+  };
+
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Novo Agendamento</DialogTitle>
+        <div className="flex items-center justify-between">
+          <DialogTitle>Novo Agendamento</DialogTitle>
+          <Button variant="ghost" size="sm" onClick={handleAdvancedForm}>
+            <ExternalLink className="h-4 w-4 mr-2" />
+            Formulário Avançado
+          </Button>
+        </div>
       </DialogHeader>
 
       <div className="grid gap-6 py-4">

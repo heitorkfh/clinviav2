@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../../components/layout/main-layout';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { Search, Plus, Eye, Edit, Phone, Mail, Calendar } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Search, Plus, Eye, Edit, Phone, Mail, Calendar, LayoutGrid, List } from 'lucide-react';
 import { LeadForm } from '../../components/marketing/lead-form';
 import { LeadDetails } from '../../components/marketing/lead-details';
+import { LeadsKanban } from '../../components/marketing/leads-kanban';
 
 const mockLeads = [
   {
@@ -41,8 +42,10 @@ export default function Leads() {
   const [showForm, setShowForm] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [editingLead, setEditingLead] = useState(null);
+  const [leads, setLeads] = useState(mockLeads);
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'kanban'
 
-  const filteredLeads = mockLeads.filter(lead =>
+  const filteredLeads = leads.filter(lead =>
     lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     lead.phone.includes(searchTerm) ||
     lead.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -72,6 +75,14 @@ export default function Leads() {
 
   const handleCloseDetails = () => {
     setSelectedLead(null);
+  };
+
+  const handleStatusChange = (leadId: number, newStatus: string) => {
+    setLeads(prevLeads =>
+      prevLeads.map(lead =>
+        lead.id === leadId ? { ...lead, status: newStatus } : lead
+      )
+    );
   };
 
   const getStatusColor = (status: string) => {
@@ -123,70 +134,97 @@ export default function Leads() {
                   className="pl-10"
                 />
               </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="h-4 w-4 mr-2" />
+                  Lista
+                </Button>
+                <Button
+                  variant={viewMode === 'kanban' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('kanban')}
+                >
+                  <LayoutGrid className="h-4 w-4 mr-2" />
+                  Kanban
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {filteredLeads.map((lead) => (
-                <div key={lead.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                        <span className="text-orange-600 font-semibold text-lg">
-                          {lead.name.split(' ').map(n => n[0]).join('')}
-                        </span>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg">{lead.name}</h3>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
-                            {lead.phone}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Mail className="h-3 w-3" />
-                            {lead.email}
+            {viewMode === 'list' ? (
+              <div className="space-y-4">
+                {filteredLeads.map((lead) => (
+                  <div key={lead.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                          <span className="text-orange-600 font-semibold text-lg">
+                            {lead.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-sm text-gray-500">
-                            {lead.source} • {lead.interest}
-                          </span>
-                          <Badge className={getStatusColor(lead.status)}>
-                            {lead.status}
-                          </Badge>
+                        <div>
+                          <h3 className="font-semibold text-lg">{lead.name}</h3>
+                          <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <span className="flex items-center gap-1">
+                              <Phone className="h-3 w-3" />
+                              {lead.phone}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Mail className="h-3 w-3" />
+                              {lead.email}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-sm text-gray-500">
+                              {lead.source} • {lead.interest}
+                            </span>
+                            <Badge className={getStatusColor(lead.status)}>
+                              {lead.status}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="text-right text-sm">
-                        <div className="font-semibold">Criado: {lead.createdAt}</div>
-                        <div className="text-gray-600 flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          Último contato: {lead.lastContact}
+                      <div className="flex items-center gap-2">
+                        <div className="text-right text-sm">
+                          <div className="font-semibold">Criado: {lead.createdAt}</div>
+                          <div className="text-gray-600 flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            Último contato: {lead.lastContact}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex gap-2 ml-4">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewLead(lead)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditLead(lead)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
+                        <div className="flex gap-2 ml-4">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleViewLead(lead)}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditLead(lead)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <LeadsKanban
+                leads={filteredLeads}
+                onEditLead={handleEditLead}
+                onViewLead={handleViewLead}
+                onStatusChange={handleStatusChange}
+              />
+            )}
           </CardContent>
         </Card>
       </div>

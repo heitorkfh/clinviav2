@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../layout/main-layout';
 import { Button } from '../ui/button';
@@ -6,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { ArrowLeft, Phone, Mail, Edit, Calendar, FileText, Image, Video, Activity, Pill } from 'lucide-react';
+import { ProntuarioFilters } from './prontuario-filters';
 
 interface PatientDetailsProps {
   patient: any;
@@ -62,6 +62,46 @@ const mockMedicalHistory = [
 
 export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
   const [activeTab, setActiveTab] = useState('prontuario');
+  const [filteredHistory, setFilteredHistory] = useState(mockMedicalHistory);
+
+  const handleFiltersChange = (filters: any) => {
+    let filtered = [...mockMedicalHistory];
+
+    // Filter by search term
+    if (filters.search) {
+      filtered = filtered.filter(item =>
+        item.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+        item.description.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+
+    // Filter by date range
+    if (filters.dateFrom) {
+      filtered = filtered.filter(item => new Date(item.date) >= filters.dateFrom);
+    }
+    if (filters.dateTo) {
+      filtered = filtered.filter(item => new Date(item.date) <= filters.dateTo);
+    }
+
+    // Filter by type
+    if (filters.type) {
+      filtered = filtered.filter(item => item.type === filters.type);
+    }
+
+    // Filter by doctor
+    if (filters.doctor) {
+      filtered = filtered.filter(item => item.doctor === filters.doctor);
+    }
+
+    // Filter by diagnosis/condition
+    if (filters.diagnosis) {
+      filtered = filtered.filter(item =>
+        item.description.toLowerCase().includes(filters.diagnosis.toLowerCase())
+      );
+    }
+
+    setFilteredHistory(filtered);
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -124,7 +164,6 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
             <TabsContent value="prontuario" className="mt-0">
               <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  {/* Informações do Paciente */}
                   <div className="lg:col-span-1">
                     <Card>
                       <CardContent className="p-6">
@@ -225,7 +264,10 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
 
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-4">Histórico médico</h3>
-                      <div className="border-b border-gray-200 mb-4">
+                      
+                      <ProntuarioFilters onFiltersChange={handleFiltersChange} />
+
+                      <div className="border-b border-gray-200 mb-4 mt-6">
                         <div className="flex gap-8">
                           <button className="pb-2 border-b-2 border-blue-600 text-blue-600 font-medium">
                             Lista
@@ -237,7 +279,7 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
                       </div>
 
                       <div className="space-y-4">
-                        {mockMedicalHistory.map((item) => (
+                        {filteredHistory.map((item) => (
                           <div
                             key={item.id}
                             className={`border-l-4 p-4 rounded-r ${getTypeColor(item.color)}`}
@@ -265,6 +307,12 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
                             </div>
                           </div>
                         ))}
+                        
+                        {filteredHistory.length === 0 && (
+                          <div className="text-center py-8 text-gray-500">
+                            Nenhum registro encontrado com os filtros aplicados.
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import Agenda from "./pages/agenda";
+import NovoAgendamento from "./pages/novo-agendamento";
 import PublicBooking from "./pages/public-booking";
 import Patients from "./pages/patients";
 import MarketingLeads from "./pages/marketing/leads";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/agendar" element={<PublicBooking />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agenda" element={<Agenda />} />
+          <Route path="/agenda/novo" element={<NovoAgendamento />} />
           <Route path="/patients" element={<Patients />} />
           <Route path="/marketing/leads" element={<MarketingLeads />} />
           <Route path="/marketing/disparos" element={<MarketingDisparos />} />
