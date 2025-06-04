@@ -138,12 +138,12 @@ export function ProntuarioFilters({ onFiltersChange }: ProntuarioFiltersProps) {
 
               <div>
                 <Label>Tipo de registro</Label>
-                <Select value={filters.type} onValueChange={(value) => handleFilterChange('type', value)}>
+                <Select value={filters.type} onValueChange={(value) => handleFilterChange('type', value === 'all' ? '' : value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Todos os tipos" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os tipos</SelectItem>
+                    <SelectItem value="all">Todos os tipos</SelectItem>
                     <SelectItem value="consulta">Consulta</SelectItem>
                     <SelectItem value="prescription">Prescrição</SelectItem>
                     <SelectItem value="exam">Exame</SelectItem>
@@ -155,12 +155,12 @@ export function ProntuarioFilters({ onFiltersChange }: ProntuarioFiltersProps) {
 
               <div>
                 <Label>Profissional</Label>
-                <Select value={filters.doctor} onValueChange={(value) => handleFilterChange('doctor', value)}>
+                <Select value={filters.doctor} onValueChange={(value) => handleFilterChange('doctor', value === 'all' ? '' : value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Todos os profissionais" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os profissionais</SelectItem>
+                    <SelectItem value="all">Todos os profissionais</SelectItem>
                     <SelectItem value="DR. EDUARDO">Dr. Eduardo</SelectItem>
                     <SelectItem value="DR. LUIS">Dr. Luís</SelectItem>
                     <SelectItem value="DR. JOEL">Dr. Joel</SelectItem>
