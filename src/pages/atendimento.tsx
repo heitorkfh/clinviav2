@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../components/layout/main-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -25,8 +24,11 @@ import {
   Camera,
   Mic,
   Play,
-  Pause
+  Pause,
+  X
 } from 'lucide-react';
+import { PatientDetails } from '../components/patients/patient-details';
+import { MedicationDialog } from '../components/atendimento/medication-dialog';
 
 const mockPatient = {
   id: 1,
@@ -52,6 +54,7 @@ export default function AtendimentoPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [currentNotes, setCurrentNotes] = useState('');
   const [patientDialogOpen, setPatientDialogOpen] = useState(false);
+  const [medicationDialogOpen, setMedicationDialogOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState('');
   const [prescription, setPrescription] = useState('');
 
@@ -74,6 +77,22 @@ export default function AtendimentoPage() {
     });
   };
 
+  const handleCancelConsultation = () => {
+    console.log('Cancelando consulta:', mockAppointment.id);
+    // Add confirmation dialog if needed
+  };
+
+  const handlePatientDetails = () => {
+    setPatientDialogOpen(true);
+  };
+
+  const handleAddMedication = (medication: any) => {
+    // Add medication to prescription
+    const medicationText = `${medication.brandName} (${medication.genericName}) - ${medication.dosage} - ${medication.route} - ${medication.frequency} - Total: ${medication.total}\n`;
+    setPrescription(prev => prev + medicationText);
+    setMedicationDialogOpen(false);
+  };
+
   return (
     <MainLayout>
       <div className="p-6 space-y-6">
@@ -84,13 +103,23 @@ export default function AtendimentoPage() {
             <p className="text-gray-600">Ferramentas para auxiliar durante a consulta.</p>
           </div>
           
-          <Button 
-            onClick={handleSaveConsultation}
-            className="bg-gradient-clinvia hover:opacity-90 text-white"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Consulta
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline"
+              onClick={handleCancelConsultation}
+              className="text-red-600 border-red-600 hover:bg-red-50"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Cancelar Consulta
+            </Button>
+            <Button 
+              onClick={handleSaveConsultation}
+              className="bg-gradient-clinvia hover:opacity-90 text-white"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Salvar Consulta
+            </Button>
+          </div>
         </div>
 
         {/* Patient Info Banner */}
@@ -113,66 +142,10 @@ export default function AtendimentoPage() {
                 <Badge variant="outline" className="text-green-600 border-green-600">
                   {mockAppointment.type}
                 </Badge>
-                <Dialog open={patientDialogOpen} onOpenChange={setPatientDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <User className="h-4 w-4 mr-2" />
-                      Ver Histórico
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                    <DialogHeader>
-                      <DialogTitle>Histórico do Paciente - {mockPatient.name}</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-3 gap-4">
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm">Alergias</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="space-y-1">
-                              {mockPatient.allergies.map((allergy, index) => (
-                                <Badge key={index} variant="destructive" className="mr-1">
-                                  {allergy}
-                                </Badge>
-                              ))}
-                            </div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm">Condições</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="space-y-1">
-                              {mockPatient.conditions.map((condition, index) => (
-                                <Badge key={index} variant="secondary" className="mr-1">
-                                  {condition}
-                                </Badge>
-                              ))}
-                            </div>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardHeader className="pb-2">
-                            <CardTitle className="text-sm">Medicações</CardTitle>
-                          </CardHeader>
-                          <CardContent>
-                            <div className="space-y-1">
-                              {mockPatient.medications.map((medication, index) => (
-                                <Badge key={index} variant="outline" className="mr-1">
-                                  {medication}
-                                </Badge>
-                              ))}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                      {/* Add more patient history details here */}
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button variant="outline" size="sm" onClick={handlePatientDetails}>
+                  <User className="h-4 w-4 mr-2" />
+                  Ver Histórico
+                </Button>
               </div>
             </div>
           </CardContent>
@@ -248,7 +221,11 @@ export default function AtendimentoPage() {
                   rows={6}
                 />
                 <div className="mt-4 flex gap-2">
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setMedicationDialogOpen(true)}
+                  >
                     Adicionar Medicamento
                   </Button>
                   <Button variant="outline" size="sm">
@@ -372,6 +349,29 @@ export default function AtendimentoPage() {
             </Card>
           </div>
         </div>
+
+        {/* Patient Details Modal */}
+        <Dialog open={patientDialogOpen} onOpenChange={setPatientDialogOpen}>
+          <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle>Histórico do Paciente</DialogTitle>
+            </DialogHeader>
+            <div className="overflow-y-auto">
+              <PatientDetails 
+                patient={mockPatient} 
+                onClose={() => setPatientDialogOpen(false)} 
+                isModal={true}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Medication Dialog */}
+        <MedicationDialog
+          open={medicationDialogOpen}
+          onOpenChange={setMedicationDialogOpen}
+          onAddMedication={handleAddMedication}
+        />
       </div>
     </MainLayout>
   );
