@@ -6,7 +6,6 @@ import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Search, Plus, Eye, Edit, Phone, Mail } from 'lucide-react';
-import { PatientForm } from '../components/patients/patient-form';
 import { PatientDetails } from '../components/patients/patient-details';
 
 const mockPatients = [
@@ -50,9 +49,7 @@ const mockPatients = [
 
 export default function Patients() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [showForm, setShowForm] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
-  const [editingPatient, setEditingPatient] = useState(null);
 
   const filteredPatients = mockPatients.filter(patient =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -61,25 +58,28 @@ export default function Patients() {
   );
 
   const handleNewPatient = () => {
-    setEditingPatient(null);
-    setShowForm(true);
-    setSelectedPatient(null);
+    setSelectedPatient({
+      id: null,
+      name: '',
+      age: 0,
+      phone: '',
+      email: '',
+      gender: '',
+      birthDate: '',
+      cpf: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      appointments: 0,
+      revenue: 0,
+      lastVisit: '',
+      status: 'Ativo'
+    });
   };
 
-  const handleEditPatient = (patient) => {
-    setEditingPatient(patient);
-    setShowForm(true);
-    setSelectedPatient(null);
-  };
-
-  const handleViewPatient = (patient) => {
+  const handleSelectPatient = (patient) => {
     setSelectedPatient(patient);
-    setShowForm(false);
-  };
-
-  const handleCloseForm = () => {
-    setShowForm(false);
-    setEditingPatient(null);
   };
 
   const handleCloseDetails = () => {
@@ -88,10 +88,6 @@ export default function Patients() {
 
   if (selectedPatient) {
     return <PatientDetails patient={selectedPatient} onClose={handleCloseDetails} />;
-  }
-
-  if (showForm) {
-    return <PatientForm patient={editingPatient} onClose={handleCloseForm} />;
   }
 
   return (
@@ -164,16 +160,9 @@ export default function Patients() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleViewPatient(patient)}
+                          onClick={() => handleSelectPatient(patient)}
                         >
                           <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditPatient(patient)}
-                        >
-                          <Edit className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>

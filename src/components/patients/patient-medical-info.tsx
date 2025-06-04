@@ -6,14 +6,14 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
-import { Plus, X, Edit, Save } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 interface PatientMedicalInfoProps {
   patient?: any;
+  isEditing?: boolean;
 }
 
-export function PatientMedicalInfo({ patient }: PatientMedicalInfoProps) {
-  const [isEditing, setIsEditing] = useState(false);
+export function PatientMedicalInfo({ patient, isEditing = false }: PatientMedicalInfoProps) {
   const [allergies, setAllergies] = useState(['Dipirona', 'Penicilina']);
   const [medications, setMedications] = useState(['Insulina', 'Metformina']);
   const [conditions, setConditions] = useState(['Diabetes', 'Hipertensão']);
@@ -37,21 +37,6 @@ export function PatientMedicalInfo({ patient }: PatientMedicalInfoProps) {
 
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold">Informações Médicas</h3>
-        {!isEditing ? (
-          <Button onClick={() => setIsEditing(true)} variant="outline">
-            <Edit className="h-4 w-4 mr-2" />
-            Editar
-          </Button>
-        ) : (
-          <Button onClick={() => setIsEditing(false)} className="bg-green-600 hover:bg-green-700">
-            <Save className="h-4 w-4 mr-2" />
-            Salvar
-          </Button>
-        )}
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Alergias */}
         <Card>
