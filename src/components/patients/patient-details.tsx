@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../layout/main-layout';
 import { Button } from '../ui/button';
@@ -18,6 +17,7 @@ import { PatientHistory } from './patient-history';
 interface PatientDetailsProps {
   patient: any;
   onClose: () => void;
+  isPopup?: boolean;
 }
 
 const mockMedicalHistory = [
@@ -68,7 +68,7 @@ const mockMedicalHistory = [
   }
 ];
 
-export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
+export function PatientDetails({ patient, onClose, isPopup = false }: PatientDetailsProps) {
   const [activeTab, setActiveTab] = useState('prontuario');
   const [isEditing, setIsEditing] = useState(!patient?.id);
   const [filteredHistory, setFilteredHistory] = useState(mockMedicalHistory);
@@ -174,14 +174,21 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
     console.log('Upload de foto do paciente');
   };
 
+  const ContentWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (isPopup) {
+      return <div className="w-full">{children}</div>;
+    }
+    return <MainLayout>{children}</MainLayout>;
+  };
+
   return (
-    <MainLayout>
-      <div className="p-6 max-w-6xl mx-auto">
+    <ContentWrapper>
+      <div className={`${isPopup ? 'p-4' : 'p-6 max-w-6xl mx-auto'}`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <Button variant="outline" onClick={onClose}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar
+              {isPopup ? 'Fechar' : 'Voltar'}
             </Button>
             <h1 className="text-2xl font-bold">
               {patient?.id ? 'Paciente' : 'Novo Paciente'}
@@ -216,6 +223,7 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
               <TabsTrigger value="historico" className="data-[state=active]:bg-white">Histórico</TabsTrigger>
             </TabsList>
 
+            
             <TabsContent value="prontuario" className="mt-0">
               <div className="p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -416,6 +424,7 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
               </div>
             </TabsContent>
 
+            
             <TabsContent value="dados" className="mt-0">
               <div className="p-6">
                 <Card>
@@ -574,6 +583,6 @@ export function PatientDetails({ patient, onClose }: PatientDetailsProps) {
           </Tabs>
         </div>
       </div>
-    </MainLayout>
+    </ContentWrapper>
   );
 }
