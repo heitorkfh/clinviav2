@@ -1,14 +1,12 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../components/layout/main-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Plus, Search, Edit, Trash2, Clock, Calendar } from 'lucide-react';
 import { Input } from '../components/ui/input';
-import { Dialog, DialogContent, DialogTrigger } from '../components/ui/dialog';
-import { ProfessionalForm } from '../components/professionals/professional-form';
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
 const mockProfessionals = [
   {
@@ -47,8 +45,8 @@ const mockProfessionals = [
 ];
 
 export default function Professionals() {
-  const [isNewProfessionalOpen, setIsNewProfessionalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const filteredProfessionals = mockProfessionals.filter(professional =>
     professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -64,17 +62,13 @@ export default function Professionals() {
             <p className="text-gray-600">Gerencie os profissionais e seus horários de atendimento.</p>
           </div>
           
-          <Dialog open={isNewProfessionalOpen} onOpenChange={setIsNewProfessionalOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-clinvia hover:opacity-90 text-white">
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Profissional
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <ProfessionalForm onClose={() => setIsNewProfessionalOpen(false)} />
-            </DialogContent>
-          </Dialog>
+          <Button 
+            onClick={() => navigate('/professionals/new')}
+            className="bg-gradient-clinvia hover:opacity-90 text-white"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Novo Profissional
+          </Button>
         </div>
 
         <div className="flex items-center gap-4">
@@ -141,7 +135,12 @@ export default function Professionals() {
                 </div>
 
                 <div className="flex gap-2 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => navigate(`/professionals/${professional.id}`)}
+                  >
                     <Edit className="h-4 w-4 mr-2" />
                     Editar
                   </Button>
