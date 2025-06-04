@@ -37,6 +37,8 @@ const menuItems = [
   { title: 'Agenda', url: '/agenda', icon: Calendar },
   { title: 'Pacientes', url: '/patients', icon: Users },
   { title: 'Profissionais', url: '/professionals', icon: Stethoscope },
+  { title: 'Procedimentos', url: '/procedures', icon: FileText },
+  { title: 'Atendimento', url: '/atendimento', icon: UserPlus },
   { title: 'Configurações', url: '/settings', icon: Settings },
 ];
 

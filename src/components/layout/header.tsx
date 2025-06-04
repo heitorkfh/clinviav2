@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Bell, Search, User, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -46,7 +45,7 @@ export function Header() {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              Perfil
+              <a href="/company-profile">Perfil da Empresa</a>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600">

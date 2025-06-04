@@ -13,6 +13,10 @@ import PublicBooking from "./pages/public-booking";
 import Patients from "./pages/patients";
 import Professionals from "./pages/professionals";
 import ProfessionalDetails from "./pages/professional-details";
+import Procedures from "./pages/procedures";
+import Settings from "./pages/settings";
+import CompanyProfile from "./pages/company-profile";
+import Atendimento from "./pages/atendimento";
 import MarketingLeads from "./pages/marketing/leads";
 import MarketingDisparos from "./pages/marketing/disparos";
 import MarketingFerramentas from "./pages/marketing/ferramentas";
@@ -38,6 +42,12 @@ const App = () => (
           <Route path="/professionals" element={<Professionals />} />
           <Route path="/professionals/new" element={<ProfessionalDetails />} />
           <Route path="/professionals/:id" element={<ProfessionalDetails />} />
+          <Route path="/procedures" element={<Procedures />} />
+          <Route path="/procedures/new" element={<Procedures />} />
+          <Route path="/procedures/:id" element={<Procedures />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/company-profile" element={<CompanyProfile />} />
+          <Route path="/atendimento" element={<Atendimento />} />
           <Route path="/marketing/leads" element={<MarketingLeads />} />
           <Route path="/marketing/disparos" element={<MarketingDisparos />} />
           <Route path="/marketing/ferramentas" element={<MarketingFerramentas />} />
