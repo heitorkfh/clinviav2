@@ -27,8 +27,7 @@ import {
   Target,
   Send,
   Wrench,
-  Cog,
-  FileText
+  Cog
 } from 'lucide-react';
 import { Logo } from '../ui/logo';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible';
