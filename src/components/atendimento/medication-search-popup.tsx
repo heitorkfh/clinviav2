@@ -114,7 +114,7 @@ export function MedicationSearchPopup({ open, onClose, onAddMedication }: Medica
               <Checkbox
                 id="brandOnly"
                 checked={showOnlyBrandName}
-                onCheckedChange={setShowOnlyBrandName}
+                onCheckedChange={(checked) => setShowOnlyBrandName(checked === true)}
               />
               <Label htmlFor="brandOnly">Exibir apenas nome do medicamento (marca)</Label>
             </div>
