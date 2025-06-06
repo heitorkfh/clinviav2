@@ -104,7 +104,6 @@ export default function AtendimentoPage() {
   };
 
   const handleOpenPatientHistory = () => {
-    setPatientDialogOpen(false);
     setPatientHistoryOpen(true);
   };
 
