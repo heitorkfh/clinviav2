@@ -2,16 +2,11 @@ import React, { useState } from 'react';
 import { MainLayout } from '../components/layout/main-layout';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
 import { Textarea } from '../components/ui/textarea';
-import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Badge } from '../components/ui/badge';
 import { 
   User, 
-  Clock, 
   Bot, 
   FileText, 
   History, 
@@ -25,10 +20,16 @@ import {
   Mic,
   Play,
   Pause,
-  X
+  X,
+  Clock
 } from 'lucide-react';
 import { MedicationSearchPopup } from '../components/atendimento/medication-search-popup';
 import { PatientHistoryPopup } from '../components/atendimento/patient-history-popup';
+import { ConsultationTimer } from '../components/atendimento/consultation-timer';
+import { VitalSigns } from '../components/atendimento/vital-signs';
+import { PrescriptionList } from '../components/atendimento/prescription-list';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
 
 const mockPatient = {
   id: 1,
@@ -53,7 +54,6 @@ const mockAppointment = {
 export default function AtendimentoPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [currentNotes, setCurrentNotes] = useState('');
-  const [patientDialogOpen, setPatientDialogOpen] = useState(false);
   const [aiSummary, setAiSummary] = useState('');
   const [prescription, setPrescription] = useState('');
   const [medicationPopupOpen, setMedicationPopupOpen] = useState(false);
@@ -137,6 +137,9 @@ export default function AtendimentoPage() {
           </div>
         </div>
 
+        {/* Timer */}
+        <ConsultationTimer />
+
         {/* Patient Info Banner */}
         <Card className="bg-blue-50 border-blue-200">
           <CardContent className="p-4">
@@ -173,6 +176,9 @@ export default function AtendimentoPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Consultation Area */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Vital Signs */}
+            <VitalSigns />
+
             {/* Consultation Notes */}
             <Card>
               <CardHeader>
@@ -233,40 +239,23 @@ export default function AtendimentoPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {/* Prescribed Medications List */}
-                {prescribedMedications.length > 0 && (
-                  <div className="mb-4 space-y-2">
-                    <Label className="text-sm font-medium">Medicamentos Prescritos:</Label>
-                    {prescribedMedications.map((med, index) => (
-                      <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                        <span className="text-sm">{med.instructions}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleRemoveMedication(index)}
-                          className="text-red-600 hover:text-red-700"
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                <Textarea
-                  placeholder="Digite a prescrição médica adicional..."
-                  value={prescription}
-                  onChange={(e) => setPrescription(e.target.value)}
-                  rows={6}
+                <PrescriptionList
+                  medications={prescribedMedications}
+                  onRemoveMedication={handleRemoveMedication}
+                  onAddMedication={() => setMedicationPopupOpen(true)}
                 />
+                
+                <div className="mt-6">
+                  <Label>Prescrição Adicional</Label>
+                  <Textarea
+                    placeholder="Digite prescrições adicionais..."
+                    value={prescription}
+                    onChange={(e) => setPrescription(e.target.value)}
+                    rows={4}
+                  />
+                </div>
+
                 <div className="mt-4 flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setMedicationPopupOpen(true)}
-                  >
-                    Adicionar Medicamento
-                  </Button>
                   <Button variant="outline" size="sm">
                     Modelo de Receita
                   </Button>
