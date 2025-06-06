@@ -175,9 +175,6 @@ export default function AtendimentoPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Consultation Area */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Vital Signs */}
-            <VitalSigns />
-
             {/* Consultation Notes */}
             <Card>
               <CardHeader>
@@ -265,45 +262,8 @@ export default function AtendimentoPage() {
 
           {/* Sidebar Tools */}
           <div className="space-y-6">
-            {/* AI Assistant */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5" />
-                  Assistente IA
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={handleGenerateAISummary}
-                >
-                  Gerar Resumo da Consulta
-                </Button>
-                
-                {aiSummary && (
-                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-medium text-sm mb-2">Resumo Gerado por IA:</h4>
-                    <p className="text-sm text-gray-700">{aiSummary}</p>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label>Consulta Rápida</Label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      placeholder="Ex: sintomas diabetes"
-                      className="pl-10"
-                    />
-                  </div>
-                  <Button variant="outline" size="sm" className="w-full">
-                    Pesquisar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Vital Signs */}
+            <VitalSigns />
 
             {/* Quick Actions */}
             <Card>
