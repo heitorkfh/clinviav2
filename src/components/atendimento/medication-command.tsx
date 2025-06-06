@@ -1,10 +1,9 @@
 
 import React, { useState } from 'react';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Card, CardContent } from '../ui/card';
+import { Check } from 'lucide-react';
 
 interface Medication {
   id: string;
@@ -30,59 +29,61 @@ interface MedicationCommandProps {
 }
 
 export function MedicationCommand({ onSelect }: MedicationCommandProps) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const filteredMedications = mockMedications.filter(medication =>
+    medication.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+    medication.activeIngredient.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  const handleSelect = (medication: Medication) => {
+    onSelect(medication);
+    setSearchValue('');
+    setShowSuggestions(false);
+  };
+
+  const handleInputFocus = () => {
+    if (searchValue.length > 0) {
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    setShowSuggestions(value.length > 0);
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          {value
-            ? mockMedications.find((medication) => medication.id === value)?.name
-            : "Selecione um medicamento..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
-        <Command>
-          <CommandInput placeholder="Buscar medicamento..." />
-          <CommandEmpty>Nenhum medicamento encontrado.</CommandEmpty>
-          <CommandList>
-            <CommandGroup>
-              {mockMedications.map((medication) => (
-                <CommandItem
-                  key={medication.id}
-                  value={medication.id}
-                  onSelect={(currentValue) => {
-                    const selectedMedication = mockMedications.find(med => med.id === currentValue);
-                    if (selectedMedication) {
-                      onSelect(selectedMedication);
-                      setValue(currentValue === value ? "" : currentValue);
-                      setOpen(false);
-                    }
-                  }}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === medication.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  <div>
-                    <div className="font-medium">{medication.name}</div>
-                    <div className="text-sm text-gray-500">{medication.activeIngredient}</div>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <div className="relative">
+      <Input
+        placeholder="Digite o nome do medicamento..."
+        value={searchValue}
+        onChange={handleInputChange}
+        onFocus={handleInputFocus}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+      />
+      
+      {showSuggestions && filteredMedications.length > 0 && (
+        <Card className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto">
+          <CardContent className="p-2">
+            {filteredMedications.map((medication) => (
+              <Button
+                key={medication.id}
+                variant="ghost"
+                className="w-full justify-start p-2 h-auto"
+                onClick={() => handleSelect(medication)}
+              >
+                <div className="text-left">
+                  <div className="font-medium">{medication.name}</div>
+                  <div className="text-sm text-gray-500">{medication.activeIngredient}</div>
+                </div>
+              </Button>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 }

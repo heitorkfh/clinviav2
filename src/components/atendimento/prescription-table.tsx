@@ -6,7 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Textarea } from '../ui/textarea';
 import { Label } from '../ui/label';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Input } from '../ui/input';
+import { Edit2, Trash2, Pen } from 'lucide-react';
 
 export interface PrescriptionItem {
   id: string;
@@ -28,8 +29,23 @@ const intervals = ['8/8h', '12/12h', '24/24h', '6/6h', 'SOS', '2/2h', '4/4h'];
 const durations = ['3 dias', '5 dias', '7 dias', '10 dias', '14 dias', '21 dias', '30 dias', 'Uso contínuo'];
 
 export function PrescriptionTable({ items, onUpdateItem, onRemoveItem }: PrescriptionTableProps) {
+  const [editingField, setEditingField] = useState<{ id: string; field: string } | null>(null);
   const [editingObservation, setEditingObservation] = useState<string | null>(null);
+  const [tempValue, setTempValue] = useState('');
   const [tempObservation, setTempObservation] = useState('');
+
+  const handleFieldEdit = (id: string, field: string, currentValue: string) => {
+    setEditingField({ id, field });
+    setTempValue(currentValue);
+  };
+
+  const handleFieldSave = () => {
+    if (editingField) {
+      onUpdateItem(editingField.id, editingField.field as keyof PrescriptionItem, tempValue);
+      setEditingField(null);
+      setTempValue('');
+    }
+  };
 
   const handleObservationEdit = (id: string, currentObservation: string) => {
     setEditingObservation(id);
@@ -72,55 +88,172 @@ export function PrescriptionTable({ items, onUpdateItem, onRemoveItem }: Prescri
               <div className="font-medium text-sm">{item.medication}</div>
 
               {/* Via */}
-              <Select
-                value={item.route}
-                onValueChange={(value) => onUpdateItem(item.id, 'route', value)}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {routes.map((route) => (
-                    <SelectItem key={route} value={route}>
-                      {route}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={item.route}
+                  onValueChange={(value) => onUpdateItem(item.id, 'route', value)}
+                >
+                  <SelectTrigger className="h-8 text-xs flex-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {routes.map((route) => (
+                      <SelectItem key={route} value={route}>
+                        {route}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleFieldEdit(item.id, 'route', item.route)}
+                    >
+                      <Pen className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Editar Via de Administração</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Via de Administração</Label>
+                        <Input
+                          value={editingField?.id === item.id && editingField?.field === 'route' ? tempValue : item.route}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          placeholder="Digite a via de administração..."
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Cancelar</Button>
+                        </DialogTrigger>
+                        <DialogTrigger asChild>
+                          <Button onClick={handleFieldSave}>
+                            Salvar
+                          </Button>
+                        </DialogTrigger>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
               {/* Intervalo */}
-              <Select
-                value={item.interval}
-                onValueChange={(value) => onUpdateItem(item.id, 'interval', value)}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {intervals.map((interval) => (
-                    <SelectItem key={interval} value={interval}>
-                      {interval}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={item.interval}
+                  onValueChange={(value) => onUpdateItem(item.id, 'interval', value)}
+                >
+                  <SelectTrigger className="h-8 text-xs flex-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {intervals.map((interval) => (
+                      <SelectItem key={interval} value={interval}>
+                        {interval}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleFieldEdit(item.id, 'interval', item.interval)}
+                    >
+                      <Pen className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Editar Intervalo</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Intervalo de Administração</Label>
+                        <Input
+                          value={editingField?.id === item.id && editingField?.field === 'interval' ? tempValue : item.interval}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          placeholder="Digite o intervalo..."
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Cancelar</Button>
+                        </DialogTrigger>
+                        <DialogTrigger asChild>
+                          <Button onClick={handleFieldSave}>
+                            Salvar
+                          </Button>
+                        </DialogTrigger>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
               {/* Duração */}
-              <Select
-                value={item.duration}
-                onValueChange={(value) => onUpdateItem(item.id, 'duration', value)}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {durations.map((duration) => (
-                    <SelectItem key={duration} value={duration}>
-                      {duration}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex items-center gap-2">
+                <Select
+                  value={item.duration}
+                  onValueChange={(value) => onUpdateItem(item.id, 'duration', value)}
+                >
+                  <SelectTrigger className="h-8 text-xs flex-1">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {durations.map((duration) => (
+                      <SelectItem key={duration} value={duration}>
+                        {duration}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => handleFieldEdit(item.id, 'duration', item.duration)}
+                    >
+                      <Pen className="h-3 w-3" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Editar Duração</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Duração do Tratamento</Label>
+                        <Input
+                          value={editingField?.id === item.id && editingField?.field === 'duration' ? tempValue : item.duration}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          placeholder="Digite a duração..."
+                        />
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <DialogTrigger asChild>
+                          <Button variant="outline">Cancelar</Button>
+                        </DialogTrigger>
+                        <DialogTrigger asChild>
+                          <Button onClick={handleFieldSave}>
+                            Salvar
+                          </Button>
+                        </DialogTrigger>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
 
               {/* Observação */}
               <Dialog>
