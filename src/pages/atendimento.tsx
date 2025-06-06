@@ -7,29 +7,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { Badge } from '../components/ui/badge';
 import { 
   User, 
-  Bot, 
   FileText, 
   History, 
   Stethoscope,
   Calendar,
-  Search,
   Save,
-  Pill,
   AlertCircle,
   Camera,
   Mic,
-  Play,
   Pause,
   X,
   Clock
 } from 'lucide-react';
-import { MedicationSearchPopup } from '../components/atendimento/medication-search-popup';
 import { PatientHistoryPopup } from '../components/atendimento/patient-history-popup';
 import { ConsultationTimer } from '../components/atendimento/consultation-timer';
 import { VitalSigns } from '../components/atendimento/vital-signs';
-import { PrescriptionList } from '../components/atendimento/prescription-list';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
+import { PrescriptionSection } from '../components/atendimento/prescription-section';
 
 const mockPatient = {
   id: 1,
@@ -54,57 +47,25 @@ const mockAppointment = {
 export default function AtendimentoPage() {
   const [isRecording, setIsRecording] = useState(false);
   const [currentNotes, setCurrentNotes] = useState('');
-  const [aiSummary, setAiSummary] = useState('');
-  const [prescription, setPrescription] = useState('');
-  const [medicationPopupOpen, setMedicationPopupOpen] = useState(false);
   const [patientHistoryOpen, setPatientHistoryOpen] = useState(false);
-  const [prescribedMedications, setPrescribedMedications] = useState<any[]>([]);
-
-  const handleGenerateAISummary = () => {
-    // Simulate AI summary generation
-    setAiSummary('Paciente apresenta quadro estável de hipertensão e diabetes. Sinais vitais dentro dos parâmetros normais. Recomendado manter medicação atual e retorno em 3 meses.');
-  };
-
-  const handleStartRecording = () => {
-    setIsRecording(!isRecording);
-  };
 
   const handleSaveConsultation = () => {
     console.log('Salvando consulta:', {
       patientId: mockPatient.id,
       appointmentId: mockAppointment.id,
-      notes: currentNotes,
-      prescription: prescription,
-      prescribedMedications: prescribedMedications,
-      aiSummary: aiSummary
+      notes: currentNotes
     });
   };
 
   const handleCancelConsultation = () => {
     if (confirm('Tem certeza que deseja cancelar esta consulta? Todas as informações não salvas serão perdidas.')) {
-      // Reset all form data
       setCurrentNotes('');
-      setPrescription('');
-      setPrescribedMedications([]);
-      setAiSummary('');
       console.log('Consulta cancelada');
     }
   };
 
-  const handleAddMedication = (medication: any) => {
-    setPrescribedMedications(prev => [...prev, medication]);
-    // Add to prescription text as well
-    setPrescription(prev => 
-      prev + (prev ? '\n' : '') + medication.instructions
-    );
-  };
-
-  const handleRemoveMedication = (index: number) => {
-    setPrescribedMedications(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleOpenPatientHistory = () => {
-    setPatientHistoryOpen(true);
+  const handleStartRecording = () => {
+    setIsRecording(!isRecording);
   };
 
   return (
@@ -227,37 +188,7 @@ export default function AtendimentoPage() {
             </Card>
 
             {/* Prescription */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Pill className="h-5 w-5" />
-                  Prescrição Médica
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <PrescriptionList
-                  medications={prescribedMedications}
-                  onRemoveMedication={handleRemoveMedication}
-                  onAddMedication={() => setMedicationPopupOpen(true)}
-                />
-                
-                <div className="mt-6">
-                  <Label>Prescrição Adicional</Label>
-                  <Textarea
-                    placeholder="Digite prescrições adicionais..."
-                    value={prescription}
-                    onChange={(e) => setPrescription(e.target.value)}
-                    rows={4}
-                  />
-                </div>
-
-                <div className="mt-4 flex gap-2">
-                  <Button variant="outline" size="sm">
-                    Modelo de Receita
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <PrescriptionSection />
           </div>
 
           {/* Sidebar Tools */}
@@ -338,12 +269,6 @@ export default function AtendimentoPage() {
         </div>
 
         {/* Popups */}
-        <MedicationSearchPopup
-          open={medicationPopupOpen}
-          onClose={() => setMedicationPopupOpen(false)}
-          onAddMedication={handleAddMedication}
-        />
-
         <PatientHistoryPopup
           open={patientHistoryOpen}
           onClose={() => setPatientHistoryOpen(false)}
