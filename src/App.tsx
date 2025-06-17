@@ -11,12 +11,11 @@ import Agenda from "./pages/agenda";
 import NovoAgendamento from "./pages/novo-agendamento";
 import PublicBooking from "./pages/public-booking";
 import Patients from "./pages/patients";
-import Professionals from "./pages/professionals";
-import ProfessionalDetails from "./pages/professional-details";
 import Procedures from "./pages/procedures";
 import Settings from "./pages/settings";
 import CompanyProfile from "./pages/company-profile";
 import Atendimento from "./pages/atendimento";
+import ProfessionalSetup from "./pages/professional-setup";
 import MarketingLeads from "./pages/marketing/leads";
 import MarketingDisparos from "./pages/marketing/disparos";
 import MarketingFerramentas from "./pages/marketing/ferramentas";
@@ -34,14 +33,12 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/setup" element={<ProfessionalSetup />} />
           <Route path="/agendar" element={<PublicBooking />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/agenda" element={<Agenda />} />
           <Route path="/agenda/novo" element={<NovoAgendamento />} />
           <Route path="/patients" element={<Patients />} />
-          <Route path="/professionals" element={<Professionals />} />
-          <Route path="/professionals/new" element={<ProfessionalDetails />} />
-          <Route path="/professionals/:id" element={<ProfessionalDetails />} />
           <Route path="/procedures" element={<Procedures />} />
           <Route path="/procedures/new" element={<Procedures />} />
           <Route path="/procedures/:id" element={<Procedures />} />

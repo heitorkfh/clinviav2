@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { MainLayout } from '../components/layout/main-layout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { Button } from '../components/ui/button';
-import { Plus, Search, Filter, Calendar as CalendarIcon, Users, User, MoreVertical } from 'lucide-react';
-import { Input } from '../components/ui/input';
+import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { AgendaList } from '../components/agenda/agenda-list';
 import { AgendaSemanal } from '../components/agenda/agenda-semanal';
@@ -32,7 +30,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'agendado',
-    professional: { name: 'DR. EDUARDO', avatar: '' },
     patient: { name: 'LUIS CARLOS DA SILVA', icon: '$' }
   },
   {
@@ -41,7 +38,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'confirmado',
-    professional: { name: 'DR. EDUARDO', avatar: '' },
     patient: { name: 'MARIA SOUZA', icon: '$' }
   },
   {
@@ -50,7 +46,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'em-atendimento',
-    professional: { name: 'DR. LUÍS', avatar: '' },
     patient: { name: 'THIAGO MONTEIRO', icon: '$' }
   },
   {
@@ -59,7 +54,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'atendido',
-    professional: { name: 'DR. JOEL', avatar: '' },
     patient: { name: 'BEATRIZ ALMEIDA', icon: '$' }
   },
   {
@@ -68,7 +62,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'faltou',
-    professional: { name: 'DRA. CARLA', avatar: '' },
     patient: { name: 'RAFAEL COSTA', icon: '$' }
   },
   {
@@ -77,7 +70,6 @@ const mockAppointments = [
     service: 'CONSULTA',
     arrival: 'N/A',
     status: 'desmarcado',
-    professional: { name: 'DR. EDUARDO', avatar: '' },
     patient: { name: 'AMANDA CARVALHO', icon: '$' }
   }
 ];
@@ -115,26 +107,13 @@ export default function Agenda() {
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Simplified Filters */}
         <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
           <span className="text-sm font-medium text-gray-700">Filtrar por</span>
           
           <Select>
             <SelectTrigger className="w-40 bg-white">
-              <SelectValue placeholder="Agendas" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectItem value="all">Todas</SelectItem>
-              <SelectItem value="eduardo">Dr. Eduardo</SelectItem>
-              <SelectItem value="luis">Dr. Luís</SelectItem>
-              <SelectItem value="joel">Dr. Joel</SelectItem>
-              <SelectItem value="carla">Dra. Carla</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="w-40 bg-white">
-              <SelectValue placeholder="Atendimentos" />
+              <SelectValue placeholder="Tipo de Consulta" />
             </SelectTrigger>
             <SelectContent className="bg-white">
               <SelectItem value="all">Todos</SelectItem>
@@ -181,19 +160,18 @@ export default function Agenda() {
               <CardContent className="p-0">
                 <div className="overflow-hidden">
                   {/* Header */}
-                  <div className="grid grid-cols-6 bg-gray-50 text-sm font-medium text-gray-700 p-4 border-b">
+                  <div className="grid grid-cols-5 bg-gray-50 text-sm font-medium text-gray-700 p-4 border-b">
                     <div>HORÁRIO</div>
-                    <div>ATENDIMENTO</div>
+                    <div>TIPO DE CONSULTA</div>
                     <div>CHEGADA</div>
                     <div>STATUS</div>
-                    <div>PROFISSIONAL</div>
                     <div>PACIENTE</div>
                   </div>
 
                   {/* Appointments */}
                   <div className="divide-y">
                     {mockAppointments.map((appointment) => (
-                      <div key={appointment.id} className="grid grid-cols-6 items-center p-4 hover:bg-gray-50 transition-colors">
+                      <div key={appointment.id} className="grid grid-cols-5 items-center p-4 hover:bg-gray-50 transition-colors">
                         <div className="font-medium text-blue-600">{appointment.time}</div>
                         <div className="text-sm text-gray-900">{appointment.service}</div>
                         <div className="text-sm text-gray-500">{appointment.arrival}</div>
@@ -213,14 +191,6 @@ export default function Agenda() {
                               <DropdownMenuItem>Desmarcado</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Avatar className="w-6 h-6">
-                            <AvatarFallback className="bg-blue-100 text-blue-600 text-xs">
-                              {appointment.professional.name.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="text-sm font-medium text-blue-600">{appointment.professional.name}</span>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">

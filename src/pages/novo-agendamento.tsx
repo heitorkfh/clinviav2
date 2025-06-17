@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Calendar } from '../components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Textarea } from '../components/ui/textarea';
-import { CalendarIcon, Clock, User, Stethoscope, ArrowLeft, Save } from 'lucide-react';
+import { CalendarIcon, Clock, User, ArrowLeft, Save } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,6 @@ export default function NovoAgendamento() {
   const [date, setDate] = useState<Date>();
   const [formData, setFormData] = useState({
     patient: '',
-    professional: '',
     service: '',
     time: '',
     observations: '',
@@ -37,7 +36,6 @@ export default function NovoAgendamento() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Criando agendamento:', { ...formData, date });
-    // Aqui você implementaria a lógica de salvamento
     navigate('/agenda');
   };
 
@@ -111,34 +109,14 @@ export default function NovoAgendamento() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label>Profissional *</Label>
-                  <Select value={formData.professional} onValueChange={(value) => handleChange('professional', value)}>
-                    <SelectTrigger>
-                      <div className="flex items-center gap-2">
-                        <Stethoscope className="h-4 w-4 text-gray-400" />
-                        <SelectValue placeholder="Selecionar profissional" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="dr-eduardo">Dr. Eduardo</SelectItem>
-                      <SelectItem value="dr-luis">Dr. Luís</SelectItem>
-                      <SelectItem value="dr-joel">Dr. Joel</SelectItem>
-                      <SelectItem value="dra-carla">Dra. Carla</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <Label>Serviço/Procedimento *</Label>
+                  <Label>Tipo de Consulta *</Label>
                   <Select value={formData.service} onValueChange={(value) => handleChange('service', value)}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecionar serviço" />
+                      <SelectValue placeholder="Selecionar tipo de consulta" />
                     </SelectTrigger>
                     <SelectContent className="bg-white">
                       <SelectItem value="consulta">Consulta</SelectItem>
                       <SelectItem value="retorno">Retorno</SelectItem>
-                      <SelectItem value="limpeza">Limpeza</SelectItem>
-                      <SelectItem value="restauracao">Restauração</SelectItem>
                       <SelectItem value="exame">Exame</SelectItem>
                       <SelectItem value="procedimento">Procedimento</SelectItem>
                       <SelectItem value="primeira-vez">Primeira vez</SelectItem>

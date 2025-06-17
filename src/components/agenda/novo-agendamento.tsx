@@ -7,7 +7,7 @@ import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarIcon, Clock, User, Stethoscope, ExternalLink } from 'lucide-react';
+import { CalendarIcon, Clock, User, ExternalLink } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
@@ -45,35 +45,15 @@ export function NovoAgendamento({ onClose }: NovoAgendamentoProps) {
       </DialogHeader>
 
       <div className="grid gap-6 py-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="patient">Paciente</Label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                id="patient"
-                placeholder="Selecionar paciente"
-                className="pl-10"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="professional">Profissional</Label>
-            <Select>
-              <SelectTrigger>
-                <div className="flex items-center gap-2">
-                  <Stethoscope className="h-4 w-4 text-gray-400" />
-                  <SelectValue placeholder="Selecionar profissional" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="dr-eduardo">Dr. Eduardo</SelectItem>
-                <SelectItem value="dr-luis">Dr. Luís</SelectItem>
-                <SelectItem value="dr-joel">Dr. Joel</SelectItem>
-                <SelectItem value="dra-carla">Dra. Carla</SelectItem>
-              </SelectContent>
-            </Select>
+        <div className="space-y-2">
+          <Label htmlFor="patient">Paciente</Label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              id="patient"
+              placeholder="Selecionar paciente"
+              className="pl-10"
+            />
           </div>
         </div>
 
@@ -126,10 +106,10 @@ export function NovoAgendamento({ onClose }: NovoAgendamentoProps) {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="service">Serviço/Procedimento</Label>
+          <Label htmlFor="service">Tipo de Consulta</Label>
           <Select>
             <SelectTrigger>
-              <SelectValue placeholder="Selecionar serviço" />
+              <SelectValue placeholder="Selecionar tipo de consulta" />
             </SelectTrigger>
             <SelectContent className="bg-white">
               <SelectItem value="consulta">Consulta</SelectItem>
